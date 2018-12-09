@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>图片预加载</title>
+    <link rel="stylesheet" href="">
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    .propress {
+        width: 500px;
+        height: 300px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: #ccc;
+        font-size: 40px;
+        line-height: 300px;
+        text-align: center;
+        display: none;
+    }
+
+    .box {
+        width: 500px;
+        height: 500px;
+        margin: 100px auto;
+        background: #eee;
+        position: relative;
+    }
+
+    .img img {
+        width: 100%;
+        height: 300px;
+    }
+
+    .btn {
+        margin-top: 50px;
+        text-align: center;
+    }
+
+    .btn a {
+        margin: 0 10px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="img">
+            <img id='img' src="https://img02.sogoucdn.com/app/a/100520021/ea2794123b10c7c8ea4e3a701bf6d400" alt="" />
+        </div>
+            <div class="btn">
+                <a href="#" customAttr='prev'>上一页</a>
+                <a href="#" customAttr='next'>下一页</a>
+            </div>
+            <div class="propress">0%</div>
+        </div>
+        <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+        <script src="./preload.js"></script>
+        <script>
+        let imgArr = [
+            'https://img02.sogoucdn.com/app/a/100520021/ea2794123b10c7c8ea4e3a701bf6d400',
+            'https://img04.sogoucdn.com/app/a/100520021/bd80b1e56c29f282993acb14fae69ec8',
+            'https://img02.sogoucdn.com/app/a/100520021/10b4a549e3fce78defe37309e50a1c8e',
+            'https://img04.sogoucdn.com/app/a/100520021/bdea3030deaca2dc602e8896896bfbc7',
+            'https://img02.sogoucdn.com/app/a/100520021/5f9449d5a783df83fa6e9f6ac87f5580',
+        ];
+        let index = 0,
+            count = 0,
+            len = imgArr.length;
+        /*$.preload(imgArr, {
+            each: function(count) {
+                $('.propress').html(Math.round((count + 1) / len * 100) + "%")
+            },
+            all: function() {
+                $('.propress').hide();
+            }
+        })*/
+        /*$.each(imgArr, function(i, src) {
+            let img = new Image();
+            $(img).on('load error', function() {
+                $('.propress').html(Math.round((count + 1) / len * 100) + "%")
+                if (count >= len - 1) {
+                    $('.propress').hide();
+                }
+                count++;
+            })
+            img.src = src;
+        });*/
+          $.preload(imgArr, {
+              order:'order',
+          })
+       /* load();
+
+        function load() {
+            var img = new Image();
+            $(img).on('load error', function() {
+                if (count >= len) {
+                } else {
+                    load();
+                }
+                count++;
+                console.log(count)
+            })
+            img.src = imgArr[count]
+        };*/
+        $('.btn a').on('click', function() {
+            if ($(this).attr('customAttr') == 'prev') {
+                index = Math.max(0, --index);
+            } else {
+                index = Math.min(len - 1, ++index);
+            }
+            $('#img').attr('src', imgArr[index])
+        })
+        </script>
+</body>
+
+</html>
